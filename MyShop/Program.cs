@@ -5,6 +5,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+});
+
 builder.Services.AddDbContext<ItemDbContext>(options =>
 {
     options.UseSqlite(
@@ -12,6 +17,8 @@ builder.Services.AddDbContext<ItemDbContext>(options =>
 });
 
 var app = builder.Build();
+
+DBInit.Seed(app);
 
 if(app.Environment.IsDevelopment())
 {
